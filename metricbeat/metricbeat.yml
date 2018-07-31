@@ -9,7 +9,21 @@
 
 #==========================  Modules configuration ============================
 
-metricbeat.config.modules:
+metricbeat.modules:
+
+#------------------------------- System Module -------------------------------
+- module: system
+  metricsets:
+    - cpu             # CPU usage
+    - filesystem      # File system usage for each mountpoint
+    - memory          # Memory usage
+    - network         # Network IO
+    - process         # Per process metrics
+  enabled: true
+  period: 60s
+  processes: ['.*']
+  cpu.metrics: [percentages, normalized_percentages]
+
   # Glob pattern for configuration loading
   path: ${path.config}/modules.d/*.yml
 
@@ -34,7 +48,7 @@ setup.template.settings:
 
 # The tags of the shipper are included in their own field with each
 # transaction published.
-#tags: ["service-X", "web-tier"]
+tags: ["HYS-PRIMARY"]
 
 # Optional fields that you can specify to add additional information to the
 # output.
@@ -64,7 +78,7 @@ setup.kibana:
   # Scheme and port can be left out and will be set to the default (http and 5601)
   # In case you specify and additional path, the scheme is required: http://localhost:5601/path
   # IPv6 addresses should always be defined as: https://[2001:db8::1]:5601
-  #host: "localhost:5601"
+  host: "HYSECURE_PRIMARY_IP_ADDRESS:5601"
 
 #============================= Elastic Cloud ==================================
 
@@ -86,7 +100,7 @@ setup.kibana:
 #-------------------------- Elasticsearch output ------------------------------
 output.elasticsearch:
   # Array of hosts to connect to.
-  hosts: ["localhost:9200"]
+  hosts: ["HYSECURE_PRIMARY_IP_ADDRESS:9200"]
 
   # Optional protocol and basic auth credentials.
   #protocol: "https"
